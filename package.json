@@ -15,8 +15,7 @@
     "scripts": {
         "dev": "bun src/index.ts",
         "build": "bun run build.ts",
-        "prepublishOnly": "bun run build",
-        "publish": "bun run prepublishOnly && npm publish --access public"
+        "publish": "bun run build && npm publish --access public"
     },
     "files": [
         "dist"
