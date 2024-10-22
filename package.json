@@ -32,9 +32,11 @@
     "homepage": "https://github.com/KilDesu/jikan",
     "repository": {
         "type": "git",
-        "url": "https://github.com/KilDesu/jikan"
+        "url": "git+https://github.com/KilDesu/jikan.git"
     },
-    "bugs": "https://github.com/KilDesu/jikan/issues",
+    "bugs": {
+        "url": "https://github.com/KilDesu/jikan/issues"
+    },
     "devDependencies": {
         "@eslint/eslintrc": "^3.1.0",
         "@eslint/js": "^9.12.0",
@@ -50,5 +52,8 @@
     },
     "peerDependencies": {
         "typescript": "^5.0.0"
+    },
+    "directories": {
+        "test": "tests"
     }
 }
