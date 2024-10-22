@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'bun:test';
-import JSDate from '../src';
+import Jikan from '../src';
 
 describe('Formatting', () => {
-    const date = new JSDate('01/01/2000');
+    const date = new Jikan('01/01/2000');
 
     it('Day', () => {
         expect(date.day).toBe(1);

@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'bun:test';
-import JSDate from '../src';
+import Jikan from '../src';
 
 describe('Date Mutation', () => {
-    const date = new JSDate('31/12/1999');
+    const date = new Jikan('31/12/1999');
 
     it('Add', () => {
         date.add({

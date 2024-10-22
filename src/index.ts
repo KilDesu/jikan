@@ -40,35 +40,35 @@ const DATE_INVALIDE = 'Date invalide';
  *
  * @param input - The input to parsed as a date. If `undefined`, the current day will be used.
  */
-export default class JSDate<T extends Input | undefined = undefined> {
+export default class Jikan<T extends Input | undefined = undefined> {
     #input: T | undefined;
     #intialValue: DateTime<boolean>;
     #value: DateTime<boolean>;
 
     /**
-     * Allows to map all the values inside the given array to a JSDate
+     * Allows to map all the values inside the given array to a Jikan
      *
-     * @param arr Array of dates to be mapped to JSDates
-     * @returns An array of JSDates
+     * @param arr Array of dates to be mapped to Jikans
+     * @returns An array of Jikans
      */
     public static fromArray<T extends Input>(arr: T[]) {
-        return arr.map((val) => new JSDate(val));
+        return arr.map((val) => new Jikan(val));
     }
 
     /**
-     * Extracts the earlier dates inside an array of JSDates.
+     * Extracts the earlier dates inside an array of Jikans.
      *
-     * If the input is not an array but rather a standalone JSDate, it will simply be returned as is.
+     * If the input is not an array but rather a standalone Jikan, it will simply be returned as is.
      *
      * @param arr The array of dates to get the minimal date from
      * @returns The earlier date
      */
-    public static min<T extends Input>(arr: MaybeArr<JSDate<T>>): JSDate<T> {
+    public static min<T extends Input>(arr: MaybeArr<Jikan<T>>): Jikan<T> {
         if (!Array.isArray(arr)) {
             return arr;
         }
 
-        return new JSDate(
+        return new Jikan(
             DateTime.min(
                 ...arr.map((d) => d.luxonDateTime)
             ).toLocaleString() as T
@@ -76,19 +76,19 @@ export default class JSDate<T extends Input | undefined = undefined> {
     }
 
     /**
-     * Extracts the laterer dates inside an array of JSDates.
+     * Extracts the laterer dates inside an array of Jikans.
      *
-     * If the input is not an array but rather a standalone JSDate, it will simply be returned as is.
+     * If the input is not an array but rather a standalone Jikan, it will simply be returned as is.
      *
      * @param arr The array of dates to get the maximal date from
      * @returns The laterer date
      */
-    public static max<T extends Input>(arr: MaybeArr<JSDate<T>>): JSDate<T> {
+    public static max<T extends Input>(arr: MaybeArr<Jikan<T>>): Jikan<T> {
         if (!Array.isArray(arr)) {
             return arr;
         }
 
-        return new JSDate(
+        return new Jikan(
             DateTime.max(
                 ...arr.map((d) => d.luxonDateTime)
             ).toLocaleString() as T
@@ -96,13 +96,13 @@ export default class JSDate<T extends Input | undefined = undefined> {
     }
 
     /**
-     * Extracts all the dates from the given string and returns them as JSDates.
+     * Extracts all the dates from the given string and returns them as Jikans.
      *
      * @param str The string to extract the dates from
-     * @returns An array of JSDates extracted from the given string
+     * @returns An array of Jikans extracted from the given string
      */
     public static extractDates(str: string) {
-        const extracted: JSDate<DateObject>[] = [];
+        const extracted: Jikan<DateObject>[] = [];
 
         let regexName: keyof typeof DATE_REGEXP;
         for (regexName in DATE_REGEXP) {
@@ -123,7 +123,7 @@ export default class JSDate<T extends Input | undefined = undefined> {
                 const { value } = tryParse(execRes.groups as Group);
 
                 if (value) {
-                    extracted.push(new JSDate(value));
+                    extracted.push(new Jikan(value));
                 }
             }
         }
@@ -225,10 +225,10 @@ export default class JSDate<T extends Input | undefined = undefined> {
     }
 
     /**
-     * Returns a readonly reference to the input given to the instance of JSDate.
+     * Returns a readonly reference to the input given to the instance of Jikan.
      *
      * @readonly
-     * @memberof JSDate
+     * @memberof Jikan
      */
     get input() {
         return this.#input;
@@ -238,7 +238,7 @@ export default class JSDate<T extends Input | undefined = undefined> {
      * Returns a readonly reference to the parsed date as a Luxon [DateTime](https://moment.github.io/luxon/api-docs/index.html#datetime).
      *
      * @readonly
-     * @memberof JSDate
+     * @memberof Jikan
      */
     get luxonDateTime() {
         return this.#value;
@@ -248,7 +248,7 @@ export default class JSDate<T extends Input | undefined = undefined> {
      * If the date parsed by the current instance is invalid, will return an object containing an error message and a hint to why the date is invalid.
      *
      * @readonly
-     * @memberof JSDate
+     * @memberof Jikan
      */
     get error() {
         return this.isValid
@@ -260,10 +260,10 @@ export default class JSDate<T extends Input | undefined = undefined> {
     }
 
     /**
-     * Returns wether the current JSDate instance is valid or not.
+     * Returns wether the current Jikan instance is valid or not.
      *
      * @readonly
-     * @memberof JSDate
+     * @memberof Jikan
      */
     get isValid() {
         return this.#value.isValid;
@@ -273,7 +273,7 @@ export default class JSDate<T extends Input | undefined = undefined> {
      * If the date parsed by the current instance is valid, will return the day of the date as a number.
      *
      * @readonly
-     * @memberof JSDate
+     * @memberof Jikan
      */
     get day() {
         return this.#value.day;
@@ -283,7 +283,7 @@ export default class JSDate<T extends Input | undefined = undefined> {
      * If the date parsed by the current instance is valid, will return the month of the date as a number (from 1 to 12).
      *
      * @readonly
-     * @memberof JSDate
+     * @memberof Jikan
      */
     get month() {
         return this.#value.month;
@@ -293,7 +293,7 @@ export default class JSDate<T extends Input | undefined = undefined> {
      * If the date parsed by the current instance is valid, will return the number of days in the month of the date.
      *
      * @readonly
-     * @memberof JSDate
+     * @memberof Jikan
      */
     get daysInMonth() {
         return this.#value.daysInMonth;
@@ -303,7 +303,7 @@ export default class JSDate<T extends Input | undefined = undefined> {
      * If the date parsed by the current instance is valid, will return the year of the date as a number.
      *
      * @readonly
-     * @memberof JSDate
+     * @memberof Jikan
      */
     get year() {
         return this.#value.year;
@@ -313,7 +313,7 @@ export default class JSDate<T extends Input | undefined = undefined> {
      * If the date parsed by the current instance is valid, will return the number of days in the year of the date as a number.
      *
      * @readonly
-     * @memberof JSDate
+     * @memberof Jikan
      */
     get daysInYear() {
         return this.#value.daysInYear;
@@ -323,7 +323,7 @@ export default class JSDate<T extends Input | undefined = undefined> {
      * If the date parsed by the current instance is valid, will return which half of the year the date is in.
      *
      * @readonly
-     * @memberof JSDate
+     * @memberof Jikan
      */
     get half() {
         return this.#value.quarter <= 2 ? 1 : 2;
@@ -333,7 +333,7 @@ export default class JSDate<T extends Input | undefined = undefined> {
      * If the date parsed by the current instance is valid, will return which quarter of the year the date is in.
      *
      * @readonly
-     * @memberof JSDate
+     * @memberof Jikan
      */
     get quarter() {
         return this.#value.quarter;
@@ -343,7 +343,7 @@ export default class JSDate<T extends Input | undefined = undefined> {
      * If the date parsed by the current instance is valid, will return wether the date is a weekend day or not.
      *
      * @readonly
-     * @memberof JSDate
+     * @memberof Jikan
      */
     get isWeekend() {
         return this.#value.isWeekend;
@@ -353,7 +353,7 @@ export default class JSDate<T extends Input | undefined = undefined> {
      * If the date parsed by the current instance is valid, will return wether the year the date is in is a leap year or not.
      *
      * @readonly
-     * @memberof JSDate
+     * @memberof Jikan
      */
     get isInLeapYear() {
         return this.#value.isInLeapYear;
@@ -363,7 +363,7 @@ export default class JSDate<T extends Input | undefined = undefined> {
      * If the date parsed by the current instance is valid, will return the date formatted as a standard French date (DD/MM/YYYY).
      *
      * @readonly
-     * @memberof JSDate
+     * @memberof Jikan
      */
     get string() {
         return this.#ifValid((date) => date.toLocaleString());
@@ -373,7 +373,7 @@ export default class JSDate<T extends Input | undefined = undefined> {
      * If the date parsed by the current instance is valid, will return the date formatted as an object { day: number, month: number: year: number }.
      *
      * @readonly
-     * @memberof JSDate
+     * @memberof Jikan
      */
     get object() {
         return this.#ifValid((date) => date.toObject());
@@ -387,7 +387,7 @@ export default class JSDate<T extends Input | undefined = undefined> {
      * - long: long version of the day of the week (e.g lundi or dimanche)
      *
      * @param format Format of the output day
-     * @memberof JSDate
+     * @memberof Jikan
      */
     public dayString(format: 'numeric' | 'short' | 'long') {
         return this.#ifValid((date) =>
@@ -407,7 +407,7 @@ export default class JSDate<T extends Input | undefined = undefined> {
      * - long: long version of the month (e.g. janvier or décembre)
      *
      * @param format Format of the output month
-     * @memberof JSDate
+     * @memberof Jikan
      */
     public monthString(format: 'numeric' | 'short' | 'long') {
         return this.#ifValid((date) =>
@@ -435,7 +435,7 @@ export default class JSDate<T extends Input | undefined = undefined> {
      *
      * @example
      * ```js
-     * const date = new JSDate("01012000");
+     * const date = new Jikan("01012000");
      * date.format("yyyy-mm-dd"); // 2000-01-01
      * date.format("mmmm yy"); // janvier 00
      * date.format("Le dddd der mm yyyy"); // Le samedi 1er janvier 2000
@@ -466,13 +466,13 @@ export default class JSDate<T extends Input | undefined = undefined> {
     }
 
     /**
-     * Returns a new JSDate with the given unites assigned to new values. The method doesn't mutate the instance's internal value.
+     * Returns a new Jikan with the given unites assigned to new values. The method doesn't mutate the instance's internal value.
 
      * @param opts Object containing the units to set the date with
      * @returns The date with the given units reassigned.
      */
     public withSet(opts: UnitOptions) {
-        return new JSDate(this.#value.set(opts));
+        return new Jikan(this.#value.set(opts));
     }
 
     /**
@@ -492,7 +492,7 @@ export default class JSDate<T extends Input | undefined = undefined> {
      * @param opts Object containing the units to add to the date
      */
     public withAdded(opts: UnitOptions) {
-        return new JSDate(this.#value.plus(opts));
+        return new Jikan(this.#value.plus(opts));
     }
 
     /**
@@ -512,7 +512,7 @@ export default class JSDate<T extends Input | undefined = undefined> {
      * @param opts Object containing the units to subtract from the date
      */
     public withSubbed(opts: UnitOptions) {
-        return new JSDate(this.#value.minus(opts));
+        return new Jikan(this.#value.minus(opts));
     }
 
     /**
@@ -535,7 +535,7 @@ export default class JSDate<T extends Input | undefined = undefined> {
         units: MaybeArr<keyof DateObject> = 'day'
     ) {
         const otherDateRef =
-            otherDate instanceof JSDate ? otherDate : new JSDate(otherDate);
+            otherDate instanceof Jikan ? otherDate : new Jikan(otherDate);
 
         if (!this.isValid || !otherDateRef.isValid) {
             return null;
@@ -557,7 +557,7 @@ export default class JSDate<T extends Input | undefined = undefined> {
      * @returns The time difference between the date and today formatted as the given `units`
      */
     public diffNow(units: MaybeArr<keyof DateObject> = 'day') {
-        const today = new JSDate();
+        const today = new Jikan();
 
         return objAbs(
             this.#value
@@ -576,7 +576,7 @@ export default class JSDate<T extends Input | undefined = undefined> {
      */
     public equal<T extends Input>(otherDate: T) {
         const ref =
-            otherDate instanceof JSDate ? otherDate : new JSDate(otherDate);
+            otherDate instanceof Jikan ? otherDate : new Jikan(otherDate);
 
         return this.#value.equals(ref.luxonDateTime);
     }

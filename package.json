@@ -1,5 +1,5 @@
 {
-    "name": "jsdate",
+    "name": "jikan",
     "type": "module",
     "version": "1.0.0",
     "author": "KilDesu <91275372+KilDesu@users.noreply.github.com>",
@@ -28,12 +28,12 @@
         "datefr"
     ],
     "license": "MIT",
-    "homepage": "https://github.com/KilDesu/jsdate",
+    "homepage": "https://github.com/KilDesu/jikan",
     "repository": {
         "type": "git",
-        "url": "https://github.com/KilDesu/jsdate"
+        "url": "https://github.com/KilDesu/jikan"
     },
-    "bugs": "https://github.com/KilDesu/jsdate/issues",
+    "bugs": "https://github.com/KilDesu/jikan/issues",
     "devDependencies": {
         "@eslint/eslintrc": "^3.1.0",
         "@eslint/js": "^9.12.0",
