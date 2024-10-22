@@ -1,5 +1,4 @@
 import type { BuildConfig } from 'bun';
-import dts from 'bun-plugin-dts';
 
 const defaultBuildConfing: BuildConfig = {
     entrypoints: ['./src/index.ts'],
