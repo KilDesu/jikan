@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'bun:test';
-import JSDate from '../src';
+import Jikan from '../src';
 import { datesInputsForTests } from '.';
 
-describe('JSDate initialisation', () => {
+describe('Jikan initialisation', () => {
     for (const date of datesInputsForTests) {
         let testName: keyof (typeof date)['inputs'];
 
@@ -12,8 +12,8 @@ describe('JSDate initialisation', () => {
 
                 const jsDate =
                     input && typeof input === 'object' && 'dateKey' in input
-                        ? new JSDate(input, 'dateKey')
-                        : new JSDate(input);
+                        ? new Jikan(input, 'dateKey')
+                        : new Jikan(input);
 
                 expect(jsDate.isValid).toBe(date.expectedValidity);
                 expect(jsDate.string).toBe(date.expectedResultString);

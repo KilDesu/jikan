@@ -1,4 +1,4 @@
-import JSDate from '../src';
+import Jikan from '../src';
 
 const baseInputDates = [
     {
@@ -101,7 +101,7 @@ export const datesInputsForTests = baseInputDates.map(
 
             milliseconds: new Date(`${year}-${month}-${day}`).getTime(),
             date: new Date(`${year}-${month}-${day}`),
-            jsDate: new JSDate(`${day}/${month}/${year}`),
+            jsDate: new Jikan(`${day}/${month}/${year}`),
             noInput: undefined,
             dateObject: {
                 day: Number(day),

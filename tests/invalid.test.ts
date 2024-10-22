@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'bun:test';
-import JSDate from '../src';
+import Jikan from '../src';
 
 describe('Invalid Dates', () => {
     it('Invalid Day', () => {
-        const dateWithInvalidDay = new JSDate('31/11/2019');
+        const dateWithInvalidDay = new Jikan('31/11/2019');
 
         expect(dateWithInvalidDay.isValid).toBe(false);
         expect(dateWithInvalidDay.error).toMatchObject({
@@ -12,7 +12,7 @@ describe('Invalid Dates', () => {
     });
 
     it('Invalid Day Leap Year', () => {
-        const dateWithInvalidDay = new JSDate('29/02/2019');
+        const dateWithInvalidDay = new Jikan('29/02/2019');
 
         expect(dateWithInvalidDay.isValid).toBe(false);
         expect(dateWithInvalidDay.error).toMatchObject({
@@ -21,7 +21,7 @@ describe('Invalid Dates', () => {
     });
 
     it('Invalid Month', () => {
-        const dateWithInvalidMonth = new JSDate('31/13/2019');
+        const dateWithInvalidMonth = new Jikan('31/13/2019');
 
         expect(dateWithInvalidMonth.isValid).toBe(false);
         expect(dateWithInvalidMonth.error).toMatchObject({
