@@ -1,0 +1,54 @@
+{
+    "name": "jsdate",
+    "type": "module",
+    "version": "1.0.0",
+    "author": "KilDesu <91275372+KilDesu@users.noreply.github.com>",
+    "description": "An utility package to handle French dates without the overhead of time or zones.",
+    "main": "./dist/index.cjs",
+    "module": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js",
+        "require": "./dist/index.cjs"
+    },
+    "scripts": {
+        "dev": "bun src/index.ts",
+        "build": "bun run build.ts",
+        "prepublishOnly": "bun run build"
+    },
+    "files": [
+        "dist"
+    ],
+    "keywords": [
+        "bun",
+        "dates",
+        "french",
+        "français",
+        "datefr"
+    ],
+    "license": "MIT",
+    "homepage": "//TODO",
+    "repository": {
+        "type": "git",
+        "url": "//TODO"
+    },
+    "bugs": "//TODO",
+    "devDependencies": {
+        "@eslint/eslintrc": "^3.1.0",
+        "@eslint/js": "^9.12.0",
+        "@types/bun": "latest",
+        "@types/luxon": "^3.4.2",
+        "@typescript-eslint/eslint-plugin": "^8.8.1",
+        "@typescript-eslint/parser": "^8.8.1",
+        "bun-plugin-dts": "^0.3.0",
+        "eslint-config-prettier": "^9.1.0",
+        "globals": "^15.11.0"
+    },
+    "dependencies": {
+        "luxon": "^3.5.0"
+    },
+    "peerDependencies": {
+        "typescript": "^5.0.0"
+    }
+}
