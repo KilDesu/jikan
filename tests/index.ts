@@ -101,7 +101,7 @@ export const datesInputsForTests = baseInputDates.map(
 
             milliseconds: new Date(`${year}-${month}-${day}`).getTime(),
             date: new Date(`${year}-${month}-${day}`),
-            jsDate: new Jikan(`${day}/${month}/${year}`),
+            jikan: new Jikan(`${day}/${month}/${year}`),
             noInput: undefined,
             dateObject: {
                 day: Number(day),

@@ -10,13 +10,13 @@ describe('Jikan initialisation', () => {
             it(testName, () => {
                 const input = date.inputs[testName];
 
-                const jsDate =
+                const jikan =
                     input && typeof input === 'object' && 'dateKey' in input
                         ? new Jikan(input, 'dateKey')
                         : new Jikan(input);
 
-                expect(jsDate.isValid).toBe(date.expectedValidity);
-                expect(jsDate.string).toBe(date.expectedResultString);
+                expect(jikan.isValid).toBe(date.expectedValidity);
+                expect(jikan.string).toBe(date.expectedResultString);
             });
         }
     }
