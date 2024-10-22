@@ -46,7 +46,7 @@ export function isNestedArray<T>(arr: MaybeArr<T[]>): arr is T[][] {
 export function objAbs(input: DiffUnitOptions) {
     let key: keyof DiffUnitOptions;
     for (key in input) {
-        let val = input[key];
+        const val = input[key];
         if (!val) {
             continue;
         }

@@ -48,6 +48,7 @@ export default [
                 ...globals.browser,
                 ...globals.es2017,
                 ...globals.node,
+                Bun: false,
             },
         },
         plugins: {
@@ -55,26 +56,12 @@ export default [
         },
         rules: {
             'no-underscore-dangle': 'off',
-            indent: ['error', 4],
+            'no-unused-vars': 'off',
+            '@typescript-eslint/no-unused-vars': ['error'],
+            indent: 'off',
             curly: 'error',
             'comma-dangle': 'off',
             'object-shorthand': 'error',
-            '@typescript-eslint/indent': [
-                'error',
-                2,
-                {
-                    CallExpression: {
-                        arguments: 'first',
-                    },
-                    FunctionDeclaration: {
-                        parameters: 'first',
-                    },
-                    FunctionExpression: {
-                        parameters: 'first',
-                    },
-                    offsetTernaryExpressions: true,
-                },
-            ],
         },
     },
 ];
