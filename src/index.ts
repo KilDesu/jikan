@@ -8,7 +8,7 @@ import type {
     MaybeArr,
     Input,
     ObjectWithDate,
-} from '../types';
+} from '../types/index';
 
 const DATE_REGEXP = {
     REGEXP_PATTERN_DATE_MONTHNAME:

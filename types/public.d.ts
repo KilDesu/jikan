@@ -1,3 +1,7 @@
+import Jikan from '../src/index.ts';
+
+export { Jikan as default };
+
 export type DateObject = {
     day: string | number | undefined;
     month: string | number;

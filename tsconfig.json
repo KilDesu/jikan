@@ -6,6 +6,7 @@
         "module": "ESNext",
         "moduleDetection": "force",
         "allowJs": true,
+        "esModuleInterop": true,
 
         // Bundler mode
         "moduleResolution": "bundler",
@@ -21,8 +22,8 @@
         // Some stricter flags (disabled by default)
         "noUnusedLocals": false,
         "noUnusedParameters": false,
-        "noPropertyAccessFromIndexSignature": false,
+        "noPropertyAccessFromIndexSignature": false
 
-        "types": ["bun-types"]
+        // "types": ["bun-types"]
     }
 }

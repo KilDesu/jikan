@@ -1,4 +1,4 @@
-import type { DiffUnitOptions, MaybeArr } from '../types';
+import type { DiffUnitOptions, MaybeArr } from '../types/index';
 
 export function isNumeric(input: unknown) {
     return typeof input === 'number' || !isNaN(Number(input));

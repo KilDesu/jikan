@@ -1,14 +1,19 @@
 import type { BuildConfig } from 'bun';
+import { createBundle } from 'dts-buddy';
 
 const defaultBuildConfing: BuildConfig = {
     entrypoints: ['./src/index.ts'],
     outdir: './dist',
 };
 
-const publicTypes = Bun.file('./types/public.d.ts');
-
 await Promise.all([
-    Bun.write('./dist/index.d.ts', publicTypes),
+    createBundle({
+        project: 'tsconfig.json',
+        output: 'dist/index.d.ts',
+        modules: {
+            '@kildesu/jikan': 'types/public.d.ts',
+        },
+    }),
     Bun.build({
         ...defaultBuildConfing,
         format: 'esm',
