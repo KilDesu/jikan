@@ -41,9 +41,9 @@ const DATE_INVALIDE = 'Date invalide';
  * @param input - The input to parsed as a date. If `undefined`, the current day will be used.
  */
 export default class Jikan<T extends Input | undefined = undefined> {
-    #input: T | undefined;
-    #intialValue: DateTime<boolean>;
-    #value: DateTime<boolean>;
+    private $input: T | undefined;
+    private $intialValue: DateTime<boolean>;
+    private $value: DateTime<boolean>;
 
     /**
      * Allows to map all the values inside the given array to a Jikan
@@ -71,7 +71,7 @@ export default class Jikan<T extends Input | undefined = undefined> {
         return new Jikan(
             DateTime.min(
                 ...arr.map((d) => d.luxonDateTime)
-            ).toLocaleString() as T
+            )!.toLocaleString() as T
         );
     }
 
@@ -91,7 +91,7 @@ export default class Jikan<T extends Input | undefined = undefined> {
         return new Jikan(
             DateTime.max(
                 ...arr.map((d) => d.luxonDateTime)
-            ).toLocaleString() as T
+            )!.toLocaleString() as T
         );
     }
 
@@ -135,33 +135,33 @@ export default class Jikan<T extends Input | undefined = undefined> {
         Settings.defaultLocale = 'fr';
         Settings.defaultZone = 'utc';
 
-        this.#input = input;
+        this.$input = input;
 
-        const adaptedInput = this.#adaptInput(input, key);
-        const allDatesFound = this.#parse(adaptedInput);
+        const adaptedInput = this.adaptInput(input, key);
+        const allDatesFound = this.parse(adaptedInput);
 
-        this.#intialValue = this.#value = this.#getHigherScored(allDatesFound);
+        this.$intialValue = this.$value = this.getHigherScored(allDatesFound);
     }
 
-    #adaptInput(input?: T, key?: keyof T): string {
+    private adaptInput(input?: T, key?: keyof T): string {
         return !input
             ? new Date().toLocaleDateString('fr-FR')
             : input instanceof Date
             ? input.toLocaleDateString('fr-FR')
             : typeof input === 'object' && 'month' in input && 'year' in input
-            ? `${'day' in input ? input.day : '01'}/${input.month}/${
-                  input.year
-              }`
+            ? `${input.day || '01'}/${input.month}/${input.year}`
             : typeof input === 'object' && key && key in input
-            ? this.#adaptInput(input[key as keyof ObjectWithDate] as T)
+            ? this.adaptInput(input[key as keyof ObjectWithDate] as T)
             : typeof input === 'number' && !isNaN(input)
             ? new Date(input).toLocaleDateString('fr-FR')
             : input.toString();
     }
 
-    #parse(adaptedInput: string): ScoredDate[] {
+    private parse(adaptedInput: string): ScoredDate[] {
         let regexName: keyof typeof DATE_REGEXP;
         const res: ScoredDate[] = [];
+
+        const thisYear = new Date().getFullYear();
 
         for (regexName in DATE_REGEXP) {
             const regex = new RegExp(`^${DATE_REGEXP[regexName]}$`);
@@ -191,7 +191,6 @@ export default class Jikan<T extends Input | undefined = undefined> {
                         score += 1;
                     }
 
-                    const thisYear = new Date().getFullYear();
                     if (
                         thisYear - 100 <= value.year &&
                         thisYear + 100 >= value.year
@@ -204,14 +203,25 @@ export default class Jikan<T extends Input | undefined = undefined> {
             }
         }
 
+        // If some dates have the same score, give more score to the one closer to this year
+        for (const resVal of res) {
+            const yearMapped = res.map((r) => Math.abs(r.date.year - thisYear));
+            if (
+                Math.abs(resVal.date.year - thisYear) ===
+                Math.min(...yearMapped)
+            ) {
+                resVal.score += 1;
+            }
+        }
+
         return res;
     }
 
-    #getHigherScored(allDates: ScoredDate[]): DateTime<boolean> {
+    private getHigherScored(allDates: ScoredDate[]): DateTime<boolean> {
         // Get max score first
         allDates.sort((a, b) => (a.score > b.score ? -1 : 1));
 
-        return allDates[0].date;
+        return allDates[0]?.date || DateTime.invalid('Aucune date trouvée');
     }
 
     /**
@@ -220,8 +230,8 @@ export default class Jikan<T extends Input | undefined = undefined> {
      * @param cb What to do with the date in case it's valid
      * @returns Whatever is returned from the callback
      */
-    #ifValid<T>(cb: (date: DateTime<true>) => T) {
-        return this.isValid ? cb(this.#value) : DATE_INVALIDE;
+    private ifValid<T>(cb: (date: DateTime<true>) => T) {
+        return this.isValid ? cb(this.$value) : DATE_INVALIDE;
     }
 
     /**
@@ -231,7 +241,7 @@ export default class Jikan<T extends Input | undefined = undefined> {
      * @memberof Jikan
      */
     get input() {
-        return this.#input;
+        return this.$input;
     }
 
     /**
@@ -241,7 +251,7 @@ export default class Jikan<T extends Input | undefined = undefined> {
      * @memberof Jikan
      */
     get luxonDateTime() {
-        return this.#value;
+        return this.$value;
     }
 
     /**
@@ -254,8 +264,8 @@ export default class Jikan<T extends Input | undefined = undefined> {
         return this.isValid
             ? null
             : {
-                  message: this.#value.invalidReason,
-                  hint: this.#value.invalidExplanation,
+                  message: this.$value.invalidReason,
+                  hint: this.$value.invalidExplanation,
               };
     }
 
@@ -266,7 +276,7 @@ export default class Jikan<T extends Input | undefined = undefined> {
      * @memberof Jikan
      */
     get isValid() {
-        return this.#value.isValid;
+        return this.$value.isValid;
     }
 
     /**
@@ -276,7 +286,7 @@ export default class Jikan<T extends Input | undefined = undefined> {
      * @memberof Jikan
      */
     get day() {
-        return this.#value.day;
+        return this.$value.day;
     }
 
     /**
@@ -286,7 +296,7 @@ export default class Jikan<T extends Input | undefined = undefined> {
      * @memberof Jikan
      */
     get month() {
-        return this.#value.month;
+        return this.$value.month;
     }
 
     /**
@@ -296,7 +306,7 @@ export default class Jikan<T extends Input | undefined = undefined> {
      * @memberof Jikan
      */
     get daysInMonth() {
-        return this.#value.daysInMonth;
+        return this.$value.daysInMonth;
     }
 
     /**
@@ -306,7 +316,7 @@ export default class Jikan<T extends Input | undefined = undefined> {
      * @memberof Jikan
      */
     get year() {
-        return this.#value.year;
+        return this.$value.year;
     }
 
     /**
@@ -316,7 +326,7 @@ export default class Jikan<T extends Input | undefined = undefined> {
      * @memberof Jikan
      */
     get daysInYear() {
-        return this.#value.daysInYear;
+        return this.$value.daysInYear;
     }
 
     /**
@@ -326,7 +336,7 @@ export default class Jikan<T extends Input | undefined = undefined> {
      * @memberof Jikan
      */
     get half() {
-        return this.#value.quarter <= 2 ? 1 : 2;
+        return this.$value.quarter <= 2 ? 1 : 2;
     }
 
     /**
@@ -336,7 +346,7 @@ export default class Jikan<T extends Input | undefined = undefined> {
      * @memberof Jikan
      */
     get quarter() {
-        return this.#value.quarter;
+        return this.$value.quarter;
     }
 
     /**
@@ -346,7 +356,7 @@ export default class Jikan<T extends Input | undefined = undefined> {
      * @memberof Jikan
      */
     get isWeekend() {
-        return this.#value.isWeekend;
+        return this.$value.isWeekend;
     }
 
     /**
@@ -356,7 +366,7 @@ export default class Jikan<T extends Input | undefined = undefined> {
      * @memberof Jikan
      */
     get isInLeapYear() {
-        return this.#value.isInLeapYear;
+        return this.$value.isInLeapYear;
     }
 
     /**
@@ -366,7 +376,7 @@ export default class Jikan<T extends Input | undefined = undefined> {
      * @memberof Jikan
      */
     get string() {
-        return this.#ifValid((date) => date.toLocaleString());
+        return this.ifValid((date) => date.toLocaleString());
     }
 
     /**
@@ -376,7 +386,7 @@ export default class Jikan<T extends Input | undefined = undefined> {
      * @memberof Jikan
      */
     get object() {
-        return this.#ifValid((date) => date.toObject());
+        return this.ifValid((date) => date.toObject());
     }
 
     /**
@@ -390,7 +400,7 @@ export default class Jikan<T extends Input | undefined = undefined> {
      * @memberof Jikan
      */
     public dayString(format: 'numeric' | 'short' | 'long') {
-        return this.#ifValid((date) =>
+        return this.ifValid((date) =>
             format === 'numeric'
                 ? date.day.toString().padStart(2, '0')
                 : format === 'short'
@@ -410,7 +420,7 @@ export default class Jikan<T extends Input | undefined = undefined> {
      * @memberof Jikan
      */
     public monthString(format: 'numeric' | 'short' | 'long') {
-        return this.#ifValid((date) =>
+        return this.ifValid((date) =>
             format === 'numeric'
                 ? date.month.toString().padStart(2, '0')
                 : format === 'short'
@@ -445,7 +455,7 @@ export default class Jikan<T extends Input | undefined = undefined> {
      * @returns
      */
     public format(pattern: string) {
-        return this.#ifValid((date) =>
+        return this.ifValid((date) =>
             date.toFormat(
                 pattern
                     .replaceAll('m', 'L')
@@ -462,17 +472,17 @@ export default class Jikan<T extends Input | undefined = undefined> {
      * @param opts Object containing the units to set the date with
      */
     public set(opts: UnitOptions) {
-        this.#value = this.#value.set(opts);
+        this.$value = this.$value.set(opts);
     }
 
     /**
-     * Returns a new Jikan with the given unites assigned to new values. The method doesn't mutate the instance's internal value.
+   * Returns a new Jikan with the given unites assigned to new values. The method doesn't mutate the instance's internal value.
 
-     * @param opts Object containing the units to set the date with
-     * @returns The date with the given units reassigned.
-     */
+   * @param opts Object containing the units to set the date with
+   * @returns The date with the given units reassigned.
+   */
     public withSet(opts: UnitOptions) {
-        return new Jikan(this.#value.set(opts));
+        return new Jikan(this.$value.set(opts));
     }
 
     /**
@@ -482,7 +492,7 @@ export default class Jikan<T extends Input | undefined = undefined> {
      * @param opts Object containing the units to add to the date
      */
     public add(opts: UnitOptions) {
-        this.#value = this.#value.plus(opts);
+        this.$value = this.$value.plus(opts);
     }
 
     /**
@@ -492,7 +502,7 @@ export default class Jikan<T extends Input | undefined = undefined> {
      * @param opts Object containing the units to add to the date
      */
     public withAdded(opts: UnitOptions) {
-        return new Jikan(this.#value.plus(opts));
+        return new Jikan(this.$value.plus(opts));
     }
 
     /**
@@ -502,7 +512,7 @@ export default class Jikan<T extends Input | undefined = undefined> {
      * @param opts Object containing the units to subtract from the date
      */
     public sub(opts: UnitOptions) {
-        this.#value = this.#value.minus(opts);
+        this.$value = this.$value.minus(opts);
     }
 
     /**
@@ -512,7 +522,7 @@ export default class Jikan<T extends Input | undefined = undefined> {
      * @param opts Object containing the units to subtract from the date
      */
     public withSubbed(opts: UnitOptions) {
-        return new Jikan(this.#value.minus(opts));
+        return new Jikan(this.$value.minus(opts));
     }
 
     /**
@@ -520,7 +530,7 @@ export default class Jikan<T extends Input | undefined = undefined> {
      * This method mutates this instance's internal value.
      */
     public reset() {
-        this.#value = this.#intialValue;
+        this.$value = this.$intialValue;
     }
 
     /**
@@ -542,7 +552,7 @@ export default class Jikan<T extends Input | undefined = undefined> {
         }
 
         return objAbs(
-            this.#value
+            this.$value
                 .diff(otherDateRef.luxonDateTime, units, {
                     conversionAccuracy: 'longterm',
                 })
@@ -560,7 +570,7 @@ export default class Jikan<T extends Input | undefined = undefined> {
         const today = new Jikan();
 
         return objAbs(
-            this.#value
+            this.$value
                 .diff(today.luxonDateTime, units, {
                     conversionAccuracy: 'longterm',
                 })
@@ -578,6 +588,6 @@ export default class Jikan<T extends Input | undefined = undefined> {
         const ref =
             otherDate instanceof Jikan ? otherDate : new Jikan(otherDate);
 
-        return this.#value.equals(ref.luxonDateTime);
+        return this.$value.equals(ref.luxonDateTime);
     }
 }

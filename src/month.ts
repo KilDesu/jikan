@@ -27,7 +27,7 @@ function validateMonth(month: unknown): month is string | number {
         return false;
     }
 
-    const monthNormalized = month.toLowerCase().replaceAll(/[^A-Za-z]/g, '');
+    const monthNormalized = month.toLowerCase().replaceAll(/[^\p{L}]/gu, '');
 
     for (const monthNames of Object.values(MonthMap)) {
         if (monthNames.includes(monthNormalized)) {
@@ -43,7 +43,7 @@ function getMonthNumberFromName(month: string | number) {
         return month;
     }
 
-    month = month.toLowerCase().replaceAll(/[^A-Za-z]/g, '');
+    month = month.toLowerCase().replaceAll(/[^\p{L}]/gu, '');
 
     for (const monthNbrAsStr in MonthMap) {
         const monthNbr = Number(monthNbrAsStr) as keyof typeof MonthMap;
